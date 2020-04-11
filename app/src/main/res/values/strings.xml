@@ -7,6 +7,9 @@
     <string name="select_what_you_own">SELECT WHAT YOU OWN</string>
     <string name="locationpin">LocationPin</string>
     <string name="your_phone">Your phone number</string>
+    <string name="google_places_key">AIzaSyA-jTNigOJ8f3zQ6qketJ1QRVLTy7rkduo</string>
     <string name="reg_once">Registration can be done only once, so please enter the correct credentials</string>
     <string name="register">Register</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="search">Search</string>
 </resources>

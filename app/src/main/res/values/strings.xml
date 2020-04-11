@@ -12,4 +12,7 @@
     <string name="register">Register</string>
     <string name="title_activity_maps">Map</string>
     <string name="search">Search</string>
+    <string name="welcome_guest">GUEST</string>
+    <string name="check_requests_for_your_shop">Check requests for your shop</string>
+    <string name="medical_shop_image">Medical Shop Image</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.coronahack.habitus_venditor.R;
@@ -35,11 +37,18 @@ public class MainActivity extends AppCompatActivity {
     RadioButton type;
     public static EditText name;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
+    TextView welcome, shop_type;
+    ImageView shop_image;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        welcome = findViewById(R.id.welcome_text);
+        shop_type = findViewById(R.id.shop_type);
+        shop_image = findViewById(R.id.shopButton);
 
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", MODE_PRIVATE);
         boolean firstStart = sharedPreferences.getBoolean("firstStart", true);
@@ -49,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (firstStart) {
             startRegistration();
+        } else {
+            welcome.setText(GlobalData.name.toUpperCase());
+            if (GlobalData.type.equals("prescriptions")) {
+                shop_type.setText("Medical shop");
+                shop_image.setImageResource(R.drawable.medicine);
+            } else if (GlobalData.type.equals("groceries")) {
+                shop_type.setText("Grocery store");
+                shop_image.setImageResource(R.drawable.groceries);
+            }
         }
     }
 
@@ -112,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 String getName, getPhNum;
@@ -128,14 +147,19 @@ public class MainActivity extends AppCompatActivity {
                     editor.putBoolean("firstStart", false);
                     editor.putString("name", getName);
                     GlobalData.name = getName;
+                    welcome.setText(getName.toUpperCase());
                     editor.putString("phNum", getPhNum);
                     GlobalData.phNum = getPhNum;
                     if (type.getText().toString().equals("Medical shop")) {
                         editor.putString("type", "prescriptions");
                         GlobalData.type = "prescriptions";
+                        shop_type.setText("Medical shop");
+                        shop_image.setImageResource(R.drawable.medicine);
                     } else if (type.getText().toString().equals("Grocery store")) {
                         editor.putString("type", "groceries");
                         GlobalData.type = "groceries";
+                        shop_type.setText("Grocery store");
+                        shop_image.setImageResource(R.drawable.groceries);
                     }
                     editor.apply();
                     alertDialog.cancel();

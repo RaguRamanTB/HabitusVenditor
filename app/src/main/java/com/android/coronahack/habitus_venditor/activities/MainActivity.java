@@ -68,6 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 shop_image.setImageResource(R.drawable.groceries);
             }
         }
+
+        shop_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CheckRequestsActivity.class));
+            }
+        });
     }
 
     private void startRegistration() {

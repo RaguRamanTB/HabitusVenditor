@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Habitus - Venditor</string>
+    <string name="registration">REGISTRATION</string>
+    <string name="select_shop">Select your shop</string>
+    <string name="medical_shop">Medical shop</string>
+    <string name="grocery_store">Grocery store</string>
+    <string name="select_what_you_own">SELECT WHAT YOU OWN</string>
+    <string name="locationpin">LocationPin</string>
+    <string name="your_phone">Your phone number</string>
+    <string name="reg_once">Registration can be done only once, so please enter the correct credentials</string>
+    <string name="register">Register</string>
 </resources>

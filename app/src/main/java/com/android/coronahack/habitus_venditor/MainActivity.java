@@ -14,6 +14,13 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", MODE_PRIVATE);
         boolean firstStart = sharedPreferences.getBoolean("firstStart", true);
-        
+
+        if (firstStart) {
+            startRegistration();
+        }
+    }
+
+    private void startRegistration() {
+
     }
 }

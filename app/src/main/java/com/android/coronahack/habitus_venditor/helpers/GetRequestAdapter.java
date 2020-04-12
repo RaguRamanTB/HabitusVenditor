@@ -3,6 +3,7 @@ package com.android.coronahack.habitus_venditor.helpers;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.coronahack.habitus_venditor.R;
+import com.android.coronahack.habitus_venditor.activities.SeePrescriptionActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -38,7 +40,7 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
 
     public static List<EnterMeds> requestList;
     RecyclerView.Adapter requestListAdapter;
-    public static Boolean isPresent = false;
+    Boolean isPresent = false;
 
     AlertDialog.Builder builder;
     AlertDialog alertDialog = null;
@@ -51,7 +53,6 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
     HashMap<String, Integer> hashMap = new HashMap<>();
     String customerName, customerPhNum, parent;
     int mKey1, countTest;
-    boolean already = false;
 
 
     public GetRequestAdapter(Context context, List<GetRequest> getRequests) {
@@ -76,9 +77,9 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
         holder.phNum.setText(gr.getGetPhNum());
         holder.address.setText(gr.getGetAddress());
         isPresent = gr.getPres();
+        holder.prescription.setText(gr.getPrescriptionLink());
 
         requestList = new ArrayList<>();
-//        holder.items.setHasFixedSize(true);
         holder.items.setLayoutManager(new LinearLayoutManager(context));
 
         for (EnterMeds rl : gr.getRequestList()) {
@@ -97,7 +98,7 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
 
     public class RequestViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, phNum, address;
+        TextView name, phNum, address, prescription;
         RecyclerView items;
         Button getPrescription;
 
@@ -108,33 +109,36 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
             phNum = itemView.findViewById(R.id.getPhoneNumber);
             address = itemView.findViewById(R.id.getAddress);
             items = itemView.findViewById(R.id.requestList);
+            prescription = itemView.findViewById(R.id.prescriptionLink);
             getPrescription = itemView.findViewById(R.id.getPrescription);
 
             if (GlobalData.type.equals("groceries")) {
                 getPrescription.setVisibility(View.INVISIBLE);
-            } else {
-                getPrescription.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isPresent) {
-                            Toast.makeText(context, "No prescription given", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "Prescription given", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
             }
+
+            getPrescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (prescription.getText().length() == 0) {
+                        Toast.makeText(context, "No prescription given", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(context, SeePrescriptionActivity.class);
+                        intent.putExtra("link", prescription.getText().toString());
+                        context.startActivity(intent);
+                    }
+                }
+            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getApproval();
+                    getApproval(name.getText().toString(), phNum.getText().toString());
                 }
             });
         }
     }
 
-    private void getApproval() {
+    private void getApproval(final String s, final String toString) {
         ViewGroup viewGroup = ((Activity) context).findViewById(android.R.id.content);
         View approveView = LayoutInflater.from(context).inflate(R.layout.approve_request, viewGroup, false);
         builder = new AlertDialog.Builder(context);
@@ -207,7 +211,7 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
                                     countTest = ur.count;
                                     DatabaseReference approved = FirebaseDatabase.getInstance().getReference().child("timeslots").child(parent).child("count");
                                     approved.setValue(countTest + 1);
-                                    updatePrevious();
+                                    updatePrevious(s, toString);
                                     alertDialog.cancel();
                                 }
                             }
@@ -228,7 +232,7 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Toast.makeText(context, "Request approved!", Toast.LENGTH_SHORT).show();
-                                    updatePrevious();
+                                    updatePrevious(s, toString);
                                     alertDialog.cancel();
                                 }
                             });
@@ -238,14 +242,15 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
 
     }
 
-    private void updatePrevious() {
+    private void updatePrevious(final String name, final String phone) {
         update = FirebaseDatabase.getInstance().getReference().child(GlobalData.type);
         ValueEventListener valueEventListener1 = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dss : dataSnapshot.getChildren()) {
                     UploadRequest ur = dss.getValue(UploadRequest.class);
-                    if (ur.shopName.equals(GlobalData.name) && ur.customerName.equals(customerName) && ur.phNum.equals(customerPhNum)) {
+                    if (ur.shopName.equals(GlobalData.name) && ur.customerName.equals(name) && ur.phNum.equals(phone)) {
+                        Toast.makeText(context, dss.getKey(), Toast.LENGTH_SHORT).show();
                         parent = dss.getKey();
                         mKey1 = ur.mKey;
                         DatabaseReference approved = FirebaseDatabase.getInstance().getReference().child(GlobalData.type).child(parent).child("mKey");

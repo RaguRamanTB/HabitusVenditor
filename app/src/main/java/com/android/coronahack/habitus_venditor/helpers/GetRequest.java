@@ -7,6 +7,24 @@ public class GetRequest {
     String getName, getPhNum, getAddress;
     List<EnterMeds> requestList;
     Boolean isPres;
+    String prescriptionLink = "";
+
+    public String getPrescriptionLink() {
+        return prescriptionLink;
+    }
+
+    public void setPrescriptionLink(String prescriptionLink) {
+        this.prescriptionLink = prescriptionLink;
+    }
+
+    public GetRequest(String getName, String getPhNum, String getAddress, List<EnterMeds> requestList, Boolean isPres, String prescriptionLink) {
+        this.getName = getName;
+        this.getPhNum = getPhNum;
+        this.getAddress = getAddress;
+        this.requestList = requestList;
+        this.isPres = isPres;
+        this.prescriptionLink = prescriptionLink;
+    }
 
     public GetRequest(String getName, String getPhNum, String getAddress, List<EnterMeds> requestList, Boolean isPres) {
         this.getName = getName;

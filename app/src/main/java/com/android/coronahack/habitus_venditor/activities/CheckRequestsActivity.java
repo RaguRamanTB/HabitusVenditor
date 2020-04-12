@@ -31,7 +31,6 @@ public class CheckRequestsActivity extends AppCompatActivity {
     List<GetRequest> getRequestsAccepted, getRequestsPending;
     DatabaseReference reference;
     ValueEventListener valueEventListener;
-    Boolean pres = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +77,16 @@ public class CheckRequestsActivity extends AppCompatActivity {
                     if (uploadRequest.shopName.equals(GlobalData.name)) {
                         if (uploadRequest.mKey == 0) {
                             if (uploadRequest.prescriptionLink.length() > 0) {
-                                pres = true;
+                                getRequestsPending.add(new GetRequest(uploadRequest.customerName, uploadRequest.phNum, uploadRequest.customerAddress, uploadRequest.mList, true, uploadRequest.prescriptionLink));
+                            } else {
+                                getRequestsPending.add(new GetRequest(uploadRequest.customerName, uploadRequest.phNum, uploadRequest.customerAddress, uploadRequest.mList, false));
                             }
-                            getRequestsPending.add(new GetRequest(uploadRequest.customerName,uploadRequest.phNum,uploadRequest.customerAddress, uploadRequest.mList, pres));
                         } else {
                             if (uploadRequest.prescriptionLink.length() > 0) {
-                                pres = true;
+                                getRequestsAccepted.add(new GetRequest(uploadRequest.customerName, uploadRequest.phNum, uploadRequest.customerAddress, uploadRequest.mList, true, uploadRequest.prescriptionLink));
+                            } else {
+                                getRequestsAccepted.add(new GetRequest(uploadRequest.customerName, uploadRequest.phNum, uploadRequest.customerAddress, uploadRequest.mList, false));
                             }
-                            getRequestsAccepted.add(new GetRequest(uploadRequest.customerName,uploadRequest.phNum,uploadRequest.customerAddress, uploadRequest.mList, pres));
                         }
                     }
                 }

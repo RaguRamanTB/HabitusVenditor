@@ -29,4 +29,5 @@
     <string name="request_approval">Request approval</string>
     <string name="check">CHECK</string>
     <string name="select_a_slot">Select a slot</string>
+    <string name="click_on_the_spinner">Click on the spinner to check number of people in the slot</string>
 </resources>

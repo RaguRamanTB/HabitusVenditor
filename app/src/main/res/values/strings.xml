@@ -15,4 +15,13 @@
     <string name="welcome_guest">GUEST</string>
     <string name="check_requests_for_your_shop">Check requests for your shop</string>
     <string name="medical_shop_image">Medical Shop Image</string>
+    <string name="pending_requests">Pending requests</string>
+    <string name="approved_requests">Approved requests</string>
+    <string name="item_quantity">Item quantity</string>
+    <string name="item_name">Item name</string>
+    <string name="name">Name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="address">Address</string>
+    <string name="prescription">PRESCRIPTION</string>
+    <string name="get_prescription">GET PRESCRIPTION</string>
 </resources>

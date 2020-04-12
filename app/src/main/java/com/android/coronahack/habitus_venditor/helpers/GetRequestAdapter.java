@@ -1,19 +1,24 @@
 package com.android.coronahack.habitus_venditor.helpers;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.coronahack.habitus_venditor.R;
+import com.google.firebase.database.DatabaseReference;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +28,15 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
 
     public static List<EnterMeds> requestList;
     RecyclerView.Adapter requestListAdapter;
-    public static Boolean isPresent;
+    public static Boolean isPresent = false;
+
+    AlertDialog.Builder builder;
+    AlertDialog alertDialog = null;
 
     private Context context;
     private List<GetRequest> getRequests;
+
+    DatabaseReference insert, update;
 
     public GetRequestAdapter(Context context, List<GetRequest> getRequests) {
         this.context = context;
@@ -100,10 +110,37 @@ public class GetRequestAdapter extends RecyclerView.Adapter<GetRequestAdapter.Re
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    getApproval();
                 }
             });
         }
+    }
+
+    private void getApproval() {
+        ViewGroup viewGroup = ((Activity) context).findViewById(android.R.id.content);
+        View approveView = LayoutInflater.from(context).inflate(R.layout.approve_request, viewGroup, false);
+        builder = new AlertDialog.Builder(context);
+        builder.setView(approveView);
+        alertDialog = builder
+                .setCancelable(true)
+                .create();
+        alertDialog.show();
+
+        Button approve;
+        final ProgressBar check;
+        check = approveView.findViewById(R.id.checkProgress);
+        approve = approveView.findViewById(R.id.approveRequestButton);
+
+        MaterialSpinner spinner = approveView.findViewById(R.id.spinner);
+        spinner.setItems("9:00 am to 9:30 am", "9:30 am to 10:00 am", "10:00 am to 10:30 am", "10:30 am to 11:00 am", "11:00 am to 11:30 am",
+                "11:30 am to 12:00 pm", "12:00 pm to 12:30 pm", "12:30 pm to 1:00 pm", "1:00 pm to 1:30 pm", "1:30 pm to 2:00 pm");
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                check.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
 }

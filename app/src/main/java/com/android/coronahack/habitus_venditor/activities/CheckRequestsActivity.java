@@ -77,12 +77,12 @@ public class CheckRequestsActivity extends AppCompatActivity {
                     assert uploadRequest != null;
                     if (uploadRequest.shopName.equals(GlobalData.name)) {
                         if (uploadRequest.mKey == 0) {
-                            if (uploadRequest.prescriptionLink.length() != 0) {
+                            if (uploadRequest.prescriptionLink.length() > 0) {
                                 pres = true;
                             }
                             getRequestsPending.add(new GetRequest(uploadRequest.customerName,uploadRequest.phNum,uploadRequest.customerAddress, uploadRequest.mList, pres));
                         } else {
-                            if (uploadRequest.prescriptionLink.length() != 0) {
+                            if (uploadRequest.prescriptionLink.length() > 0) {
                                 pres = true;
                             }
                             getRequestsAccepted.add(new GetRequest(uploadRequest.customerName,uploadRequest.phNum,uploadRequest.customerAddress, uploadRequest.mList, pres));
